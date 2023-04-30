@@ -1,6 +1,9 @@
 package com.avisys.cim.payloads;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 
 /*
  DTO: Standard Design practice to avoid actual data expose to the Client from the Server  
@@ -15,7 +18,9 @@ public class RegisterDTO {
 	private String lastName;
 
 	
-	private String mobileNumber;
+	@ElementCollection
+    private List<String> mobileNumbers;
+	
 
 	
 
@@ -24,12 +29,6 @@ public class RegisterDTO {
 	}
 
 
-	public RegisterDTO(String firstName, String lastName, String mobileNumber) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.mobileNumber = mobileNumber;
-	}
 
 
 	public String getFirstName() {
@@ -37,9 +36,13 @@ public class RegisterDTO {
 	}
 
 
+
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
+
 
 
 	public String getLastName() {
@@ -47,19 +50,27 @@ public class RegisterDTO {
 	}
 
 
+
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
 
-	public String getMobileNumber() {
-		return mobileNumber;
+
+
+	public List<String> getMobileNumbers() {
+		return mobileNumbers;
 	}
 
 
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+
+
+	public void setMobileNumbers(List<String> mobileNumbers) {
+		this.mobileNumbers = mobileNumbers;
 	}
+
+
 	
 	
 }

@@ -9,8 +9,9 @@ import java.util.List;
 public interface CustomerService {
 
 
-	public boolean register(RegisterDTO regdto);
-
+	
+	
+	
 	public List<Customer> getAllCustomers();
 
 	public List<Customer> searchCustomerByFirstName(String firstName);
@@ -18,4 +19,8 @@ public interface CustomerService {
 	public List<Customer> searchCustomerByLastName(String lastName);
 
 	public List<Customer> searchCustomerByMobile(String mobile);
+
+	
+	
+	
 }
