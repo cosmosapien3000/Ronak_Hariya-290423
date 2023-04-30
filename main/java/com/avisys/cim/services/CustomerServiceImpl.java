@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
 			Query query = entityManager.createQuery("SELECT c FROM Customer c JOIN c.mobileNumbers m WHERE m = :mobile");
 			query.setParameter("mobile", mobile);
 			if(!query.getResultList().isEmpty())
-				return false; /* This is a case of already existing Customer */
+				return false;
 			
 		}
 		
@@ -111,6 +111,35 @@ public class CustomerServiceImpl implements CustomerService {
 		query.setParameter("mobile", mobile);
 		return query.getResultList();
 
+	}
+
+	@Override
+	public boolean deleteCustomer(String mobile) {
+		
+		System.out.println("Inside Delete Customer Service-Impl Method");
+		Query query = entityManager.createQuery("SELECT c FROM Customer c JOIN c.mobileNumbers m WHERE m = :mobile");
+		query.setParameter("mobile", mobile);
+		Customer oldCustomer=new Customer();
+		
+		// If No such Customer Found
+		if(query.getResultList().isEmpty())
+		{
+			System.out.println("No such Customer Found!");
+			return false;
+
+		}
+			
+		
+		else {
+			
+		// If Valid Customer Found
+			List<Customer> customers = query.getResultList();
+			oldCustomer = customers.get(0);
+			customerdao.delete(oldCustomer);
+			System.out.println("Customer Deleted Successfully..!");
+			return true;
+		}
+		
 	}
 	
 }

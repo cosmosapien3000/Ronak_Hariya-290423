@@ -21,6 +21,8 @@ public interface CustomerService {
 
 	public List<Customer> searchCustomerByMobile(String mobile);
 
+	public boolean deleteCustomer(String mobile);
+
 	
 	
 	

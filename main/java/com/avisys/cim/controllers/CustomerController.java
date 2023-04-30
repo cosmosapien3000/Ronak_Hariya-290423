@@ -3,6 +3,7 @@ package com.avisys.cim.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,7 +98,7 @@ public class CustomerController {
 		
 	}
 	
-	/* To Register new customers */
+/* To Register new customers */
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@RequestBody RegisterDTO customerdto)
@@ -114,5 +115,23 @@ public class CustomerController {
 		// For New  Customer
         return new ResponseEntity(new ApiResponse("Registration Successful..!",true),HttpStatus.CREATED);
     }
+
+/* Delete a Customer */
+	
+	@GetMapping(value="/delete",params= {"mobile"})
+	public ResponseEntity<?> deleteCustomer(@RequestParam ("mobile") String mobile)
+	{
+		System.out.println("Inside Customer Controller - delete Method");
+		boolean isCustomerDeleted=customerService.deleteCustomer(mobile);
+		
+		if(isCustomerDeleted==true)
+		{
+			return new ResponseEntity(new ApiResponse("Customer Deleted successfully.!",true),HttpStatus.ACCEPTED);
+
+		}
+		
+		else
+			return new ResponseEntity(new ApiResponse("Please provide Valid Mobile Number.!",false),HttpStatus.BAD_REQUEST);
+		}
 
 }
