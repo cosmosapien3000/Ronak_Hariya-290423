@@ -23,7 +23,7 @@ public class RegisterDTO {
 	
 
 	
-
+	// For Serialization 
 	public RegisterDTO() {
 		super();
 	}

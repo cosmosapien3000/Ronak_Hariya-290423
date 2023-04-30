@@ -3,6 +3,8 @@ package com.avisys.cim.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.avisys.cim.Customer;
 import com.avisys.cim.dao.CustomerDao;
 import com.avisys.cim.payloads.RegisterDTO;
+import com.avisys.cim.payloads.UpdateDTO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -140,6 +143,44 @@ public class CustomerServiceImpl implements CustomerService {
 			return true;
 		}
 		
+	}
+
+	@Override
+	public boolean addAlternateMobile(int id,String mobile) {
+		
+		Customer oldCustomer=customerdao.findById(id);
+		if(oldCustomer!=null)
+		{
+			System.out.println("Numbers Associated before :"+oldCustomer.getMobileNumbers().toString());
+			System.out.println("New Number :"+mobile);
+			oldCustomer.getMobileNumbers().add(mobile);
+			System.out.println("Numbers Associated After:"+oldCustomer.getMobileNumbers().toString());
+
+			return true;
+			
+		}
+		// If a Customer is InValid!
+		return false;
+	}
+
+	@Override
+	public boolean removeAlternateMobile(int id,String mobile) {
+		Customer oldCustomer=customerdao.findById(id);
+		if(oldCustomer!=null)
+		{
+			System.out.println("Numbers Associated before :"+oldCustomer.getMobileNumbers().toString());
+			System.out.println("New Number :"+mobile);
+			//Trim the List to remove mobile number
+			List <String> revisedList=oldCustomer.getMobileNumbers().stream().filter(m->!m.equals(mobile)).collect(Collectors.toList());
+			System.out.println(revisedList.toString());
+			oldCustomer.setMobileNumbers(revisedList);
+			System.out.println("Numbers Associated After:"+oldCustomer.getMobileNumbers().toString());
+
+			return true;
+			
+		}
+		// If a Customer is InValid!
+		return false;
 	}
 	
 }

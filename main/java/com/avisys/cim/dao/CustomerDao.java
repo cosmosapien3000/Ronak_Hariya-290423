@@ -1,6 +1,7 @@
 package com.avisys.cim.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,5 +22,5 @@ public interface CustomerDao extends JpaRepository<Customer, Long> {
     @Transactional
     void insertCustomer(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("mobileNumbers") List<String> mobileNumbers);
 
-	
+	Customer findById(int  id);
 }

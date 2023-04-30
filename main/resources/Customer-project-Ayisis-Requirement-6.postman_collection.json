@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "3133d32b-d9fa-41f5-ac44-69e69f4aad43",
+		"name": "Customer-project-Ayisis-Requirement-6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add-Alternate-Mobile-Number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/com.myApp/addMobileNumber/2?mobile=8111111112",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"com.myApp",
+						"addMobileNumber",
+						"2"
+					],
+					"query": [
+						{
+							"key": "mobile",
+							"value": "8111111112"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Add-Alternate-Mobile-Number",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/com.myApp/addMobileNumber/2?mobile=8111111112",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"com.myApp",
+								"addMobileNumber",
+								"2"
+							],
+							"query": [
+								{
+									"key": "mobile",
+									"value": "8111111112"
+								}
+							]
+						}
+					},
+					"status": "Accepted",
+					"code": 202,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 30 Apr 2023 11:34:54 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Mobile Number added to the Customer successfully.!\",\n    \"status\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Get-All-Customers",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/com.myApp/allCustomers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"com.myApp",
+								"allCustomers"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 30 Apr 2023 11:35:07 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"firstName\": \"Alan\",\n        \"lastName\": \"Smith\",\n        \"mobileNumbers\": [\n            \"9111111111\",\n            \"9111111115\"\n        ]\n    },\n    {\n        \"id\": 2,\n        \"firstName\": \"Joe\",\n        \"lastName\": \"Turing\",\n        \"mobileNumbers\": [\n            \"8111111112\",\n            \"9111111112\"\n        ]\n    },\n    {\n        \"id\": 3,\n        \"firstName\": \"John\",\n        \"lastName\": \"Smith\",\n        \"mobileNumbers\": [\n            \"9111111113\"\n        ]\n    },\n    {\n        \"id\": 4,\n        \"firstName\": \"Kathy\",\n        \"lastName\": \"Sierra\",\n        \"mobileNumbers\": [\n            \"9111111114\"\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Remove-existing-Mobile-Number",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Remove-existing-Mobile-Number",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/com.myApp/removeMobileNumber/2?mobile=8111111112",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"com.myApp",
+								"removeMobileNumber",
+								"2"
+							],
+							"query": [
+								{
+									"key": "mobile",
+									"value": "8111111112"
+								}
+							]
+						}
+					},
+					"status": "Accepted",
+					"code": 202,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 30 Apr 2023 11:35:20 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Mobile Number removed from Customer Successfully.!\",\n    \"status\": true\n}"
+				}
+			]
+		}
+	]
+}

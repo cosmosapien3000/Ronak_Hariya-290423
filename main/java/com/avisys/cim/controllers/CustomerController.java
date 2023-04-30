@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import com.avisys.cim.Customer;
 import com.avisys.cim.dao.CustomerDao;
 import com.avisys.cim.payloads.ApiResponse;
 import com.avisys.cim.payloads.RegisterDTO;
+import com.avisys.cim.payloads.UpdateDTO;
 import com.avisys.cim.services.CustomerService;
 
 
@@ -132,6 +134,44 @@ public class CustomerController {
 		
 		else
 			return new ResponseEntity(new ApiResponse("Please provide Valid Mobile Number.!",false),HttpStatus.BAD_REQUEST);
+		}
+	
+/* Update Customer  */
+	
+	// Add a Alternate Mobile number
+	
+	@GetMapping(value="/addMobileNumber/{id}" )
+	public ResponseEntity<?> addAlternateMobileNumber(@RequestParam ("mobile") String mobile,@PathVariable int id)
+	{
+		System.out.println("Inside Customer Controller-add alternate method");
+		boolean isAdded=customerService.addAlternateMobile(id,mobile);
+		if(isAdded==true)
+		{
+			return new ResponseEntity(new ApiResponse("Mobile Number added to the Customer successfully.!",true),HttpStatus.ACCEPTED);
+
+		}
+		else 
+			return new ResponseEntity(new ApiResponse("Provided Mobile Number already associated with another Customer.!",false),HttpStatus.BAD_REQUEST);
+
+		
+		}
+	
+	// delete a Alternate Mobile number
+	
+	@GetMapping(value="/removeMobileNumber/{id}" )
+	public ResponseEntity<?> removeAlternateMobileNumber(@RequestParam ("mobile") String mobile,@PathVariable int id)
+	{
+		System.out.println("Inside Customer Controller-remove alternate method");
+		boolean isremoved=customerService.removeAlternateMobile(id,mobile);
+		if(isremoved==true)
+		{
+			return new ResponseEntity(new ApiResponse("Mobile Number removed from Customer Successfully.!",true),HttpStatus.ACCEPTED);
+
+		}
+		else 
+			return new ResponseEntity(new ApiResponse("Provided Mobile Number already associated with another Customer.!",false),HttpStatus.BAD_REQUEST);
+
+		
 		}
 
 }
