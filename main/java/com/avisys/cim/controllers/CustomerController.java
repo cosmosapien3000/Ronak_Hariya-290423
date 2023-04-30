@@ -97,6 +97,22 @@ public class CustomerController {
 		
 	}
 	
-
+	/* To Register new customers */
+	
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@RequestBody RegisterDTO customerdto)
+	{
+		System.out.println("inside customer controller and register mapping");
+		
+		boolean  createdCustomer=this.customerService.register(customerdto);
+		
+		// For Already existing Customer
+		if (createdCustomer == false) {
+            return new ResponseEntity(new ApiResponse("Unable to create Customer. Mobile number already present.",false),HttpStatus.INTERNAL_SERVER_ERROR);
+            		
+        }
+		// For New  Customer
+        return new ResponseEntity(new ApiResponse("Registration Successful..!",true),HttpStatus.CREATED);
+    }
 
 }

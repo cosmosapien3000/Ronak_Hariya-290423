@@ -36,7 +36,33 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return customerdao.findAll();
 	}
-
+	
+/* Changes After Modification 3*/
+	@Override
+	public boolean register(RegisterDTO regdto) {
+		System.out.println("Inside Customer-Service-Impl");
+		Customer newCustomer=new Customer();
+		
+		// Check if user with this mobile number already exists
+		for(String mobile:regdto.getMobileNumbers())
+		{
+			Query query = entityManager.createQuery("SELECT c FROM Customer c JOIN c.mobileNumbers m WHERE m = :mobile");
+			query.setParameter("mobile", mobile);
+			if(!query.getResultList().isEmpty())
+				return false; /* This is a case of already existing Customer */
+			
+		}
+		
+		// Save the user to the database
+       newCustomer.setFirstName(regdto.getFirstName());
+       newCustomer.setLastName(regdto.getLastName());
+       newCustomer.setMobileNumbers(regdto.getMobileNumbers());
+       customerdao.save(newCustomer);
+        System.out.println("User saved to Database successfully..!");
+        return true;
+        	
+		
+	}
 
 	@Override
 	public List<Customer> searchCustomerByFirstName(String firstName) {
@@ -69,7 +95,7 @@ public class CustomerServiceImpl implements CustomerService {
 		List<Customer> matchedCustomers=new ArrayList<Customer>();
 		for(Customer c:customers)
 		{
-			System.out.println(c.getFirstName()+" "+ c.getLastName());
+			
 			if(c.getLastName().toLowerCase().contains(lastName.toLowerCase()))
 				matchedCustomers.add(c); /* Added in List if Matched the requirement*/
 				
