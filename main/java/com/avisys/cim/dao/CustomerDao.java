@@ -13,6 +13,6 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface CustomerDao extends JpaRepository<Customer, Long> {
 	
-	
+	Customer findByMobileNumber(String mobileNumber);
 
 }

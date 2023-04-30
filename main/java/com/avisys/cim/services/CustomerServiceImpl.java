@@ -21,7 +21,40 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerDao customerdao;
 	
-	
+	@Override
+	public boolean register(RegisterDTO regdto) {
+		System.out.println("Inside Customer-Service-Impl");
+		Customer newCustomer=new Customer();
+		
+		// Check if user with this mobile number already exists
+		Customer existingUser = customerdao.findByMobileNumber(regdto.getMobileNumber());
+        if (existingUser != null) {
+            return false;
+        }
+		
+        else
+        // Save the user to the database
+        newCustomer=dtoToCust(regdto);
+        customerdao.save(newCustomer);
+        System.out.println("User saved to Database successfully..!");
+        return true;
+        	
+		
+	}
+
+/* Helper Method to Convert DTO -> Transient Entity. We can also use Model-Mapper for the same. */
+	public Customer dtoToCust(RegisterDTO regdto)
+	{
+		Customer newCustomer=new Customer();
+		newCustomer.setFirstName(regdto.getFirstName());
+		newCustomer.setLastName(regdto.getLastName());
+		newCustomer.setMobileNumber(regdto.getMobileNumber());
+		
+		System.out.println("DTO conversion success.!");
+		return newCustomer;
+		
+		
+	}
 	
 	
 	

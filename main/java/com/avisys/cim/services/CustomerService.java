@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomerService {
 
 
-	
+	public boolean register(RegisterDTO regdto);
 
 	public List<Customer> getAllCustomers();
 
