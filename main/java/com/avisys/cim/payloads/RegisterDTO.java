@@ -1,5 +1,6 @@
 package com.avisys.cim.payloads;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -25,8 +26,20 @@ public class RegisterDTO {
 	
 	// For Serialization 
 	public RegisterDTO() {
-		super();
+		
 	}
+
+	
+
+
+
+	public RegisterDTO(String firstName, String lastName, List<String> mobileNumbers) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mobileNumbers = mobileNumbers;
+	}
+
 
 
 

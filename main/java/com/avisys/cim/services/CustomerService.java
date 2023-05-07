@@ -2,6 +2,7 @@ package com.avisys.cim.services;
 
 import com.avisys.cim.Customer;
 import com.avisys.cim.controllers.*;
+
 import com.avisys.cim.payloads.RegisterDTO;
 import com.avisys.cim.payloads.UpdateDTO;
 
@@ -21,13 +22,13 @@ public interface CustomerService {
 
 	public List<Customer> searchCustomerByLastName(String lastName);
 
-	public List<Customer> searchCustomerByMobile(String mobile);
+	public Customer searchCustomerByMobile(String mobile);
 
-	public boolean deleteCustomer(String mobile);
+	public void deleteCustomer(String mobile);
 
-	public boolean addAlternateMobile(int id,String mobile);
-
-	public boolean removeAlternateMobile(int id,String mobile);
+	public boolean removeAlternateMobile(long id,String mobile);
+	 
+	public boolean addAlternateMobile(long id,String mobile);
 
 	
 	

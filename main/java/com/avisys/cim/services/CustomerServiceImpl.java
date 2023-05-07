@@ -3,16 +3,22 @@ package com.avisys.cim.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.avisys.cim.Customer;
-import com.avisys.cim.dao.CustomerDao;
+import com.avisys.cim.exceptions.InvalidInputException;
+import com.avisys.cim.exceptions.NoCustomerFoundException;
+import com.avisys.cim.payloads.CustomerDTO;
 import com.avisys.cim.payloads.RegisterDTO;
 import com.avisys.cim.payloads.UpdateDTO;
+import com.avisys.cim.repository.CustomerRepository;
+import com.avisys.cim.repository.CustomerRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -22,133 +28,100 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
-/* Autowired-> Dependency Injection at Runtime.  */
+	/* Autowired-> Dependency Injection at Runtime.  */
 	
 	@Autowired
-	private CustomerDao customerdao;
+	private CustomerRepository customerRepo;
 	
 	@Autowired
     private EntityManager entityManager;
 	
-
+	@Autowired
+	private ModelMapper modelMapper;
 	
 
 	
 	@Override
 	public List<Customer> getAllCustomers() {
 		// TODO Auto-generated method stub
-		return customerdao.findAll();
+		return customerRepo.findAll();
+	}
+
+
+
+	@Override
+	public List<Customer> searchCustomerByFirstName(String word) {
+		
+		List<Customer> list=this.customerRepo.searchByFirstName("%"+word+"%");
+		return list;
+		
+	}
+
+
+
+	@Override
+	public List<Customer> searchCustomerByLastName(String word) {
+		List<Customer>list=this.customerRepo.searchBylastName("%"+word+"%");
+		return list;
+	}
+
+
+
+	@Override
+	public Customer searchCustomerByMobile(String mobile) {
+		Customer customer=this.customerRepo.searchByMobileNumber(mobile).orElseThrow(()->new NoCustomerFoundException("No such record found"));
+		return customer;
+	}
+
+
+
+	@Override
+	public boolean register(RegisterDTO registerDTO) {
+		// Corner cases
+		if(registerDTO.getFirstName().equals("")||registerDTO.getLastName().equals(""))
+		{
+			throw new InvalidInputException("First name or Last name can't be blank");
+		}
+		if(registerDTO.getMobileNumbers().isEmpty())
+		{
+			throw new InvalidInputException("Please register with a mobile number");
+		}
+		registerDTO.getMobileNumbers().toString();
+		for(String mobile:registerDTO.getMobileNumbers())
+		{
+			if(mobile.length()!=10)
+			{
+				throw new InvalidInputException("Mobile number must be of 10 digits");
+			}
+			if(customerRepo.searchByMobileNumber(mobile).isPresent())
+			{
+				return false;
+			}
+		}
+		Customer newCustomer=new Customer();
+		newCustomer.setFirstName(registerDTO.getFirstName());
+		newCustomer.setLastName(registerDTO.getLastName());
+		newCustomer.setMobileNumbers(registerDTO.getMobileNumbers());
+		this.customerRepo.save(newCustomer);
+		return true;
+	}
+
+
+
+	@Override
+	public void deleteCustomer(String mobile) {
+		if(mobile.equals("")||mobile.length()!=10)
+		{
+			throw new InvalidInputException("Please provide valid mobile number");
+		}
+		Customer customer=this.customerRepo.searchByMobileNumber(mobile).orElseThrow(()->new NoCustomerFoundException("No Customer found"));
+		this.customerRepo.delete(customer);
 	}
 	
-/* Changes After Modification 3*/
 	@Override
-	public boolean register(RegisterDTO regdto) {
-		System.out.println("Inside Customer-Service-Impl");
-		Customer newCustomer=new Customer();
+	public boolean addAlternateMobile(long id,String mobile) {
 		
-		// Check if user with this mobile number already exists
-		for(String mobile:regdto.getMobileNumbers())
-		{
-			Query query = entityManager.createQuery("SELECT c FROM Customer c JOIN c.mobileNumbers m WHERE m = :mobile");
-			query.setParameter("mobile", mobile);
-			if(!query.getResultList().isEmpty())
-				return false;
-			
-		}
-		
-		// Save the user to the database
-       newCustomer.setFirstName(regdto.getFirstName());
-       newCustomer.setLastName(regdto.getLastName());
-       newCustomer.setMobileNumbers(regdto.getMobileNumbers());
-       customerdao.save(newCustomer);
-        System.out.println("User saved to Database successfully..!");
-        return true;
-        	
-		
-	}
-
-	@Override
-	public List<Customer> searchCustomerByFirstName(String firstName) {
-		
-		System.out.println("Inside Search by first Name Impl: "+firstName);
-		// Use of Ready made implementations provided in JPA Repository
-		List<Customer>customers= customerdao.findAll();
-		List<Customer> matchedCustomers=new ArrayList<Customer>();
-		for(Customer c:customers)
-		{
-			System.out.println(c.toString());
-			if(c.getFirstName().toLowerCase().contains(firstName.toLowerCase()))
-			{
-				
-				matchedCustomers.add(c); /* Added in List if Matched the requirement*/
-			}
-				
-				
-		}
-		return matchedCustomers;
-			
-		
-	}
-
-	@Override
-	public List<Customer> searchCustomerByLastName(String lastName) {
-		
-		// Use of Ready made implementations provided in JPA Repository
-		List<Customer>customers= customerdao.findAll();
-		List<Customer> matchedCustomers=new ArrayList<Customer>();
-		for(Customer c:customers)
-		{
-			
-			if(c.getLastName().toLowerCase().contains(lastName.toLowerCase()))
-				matchedCustomers.add(c); /* Added in List if Matched the requirement*/
-				
-		}
-		return matchedCustomers;
-		
-	}
-
-	@Override
-	public List<Customer> searchCustomerByMobile(String mobile) {
-		
-		Query query = entityManager.createQuery("SELECT c FROM Customer c JOIN c.mobileNumbers m WHERE m = :mobile");
-		query.setParameter("mobile", mobile);
-		return query.getResultList();
-
-	}
-
-	@Override
-	public boolean deleteCustomer(String mobile) {
-		
-		System.out.println("Inside Delete Customer Service-Impl Method");
-		Query query = entityManager.createQuery("SELECT c FROM Customer c JOIN c.mobileNumbers m WHERE m = :mobile");
-		query.setParameter("mobile", mobile);
-		Customer oldCustomer=new Customer();
-		
-		// If No such Customer Found
-		if(query.getResultList().isEmpty())
-		{
-			System.out.println("No such Customer Found!");
-			return false;
-
-		}
-			
-		
-		else {
-			
-		// If Valid Customer Found
-			List<Customer> customers = query.getResultList();
-			oldCustomer = customers.get(0);
-			customerdao.delete(oldCustomer);
-			System.out.println("Customer Deleted Successfully..!");
-			return true;
-		}
-		
-	}
-
-	@Override
-	public boolean addAlternateMobile(int id,String mobile) {
-		
-		Customer oldCustomer=customerdao.findById(id);
+		Customer oldCustomer=customerRepo.findById(id).orElseThrow(()->new NoCustomerFoundException("No Customer found"));
 		if(oldCustomer!=null)
 		{
 			System.out.println("Numbers Associated before :"+oldCustomer.getMobileNumbers().toString());
@@ -164,8 +137,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public boolean removeAlternateMobile(int id,String mobile) {
-		Customer oldCustomer=customerdao.findById(id);
+	public boolean removeAlternateMobile(long id,String mobile) {
+		Customer oldCustomer=customerRepo.findById(id).orElseThrow(()->new NoCustomerFoundException("No Customer found"));;
 		if(oldCustomer!=null)
 		{
 			System.out.println("Numbers Associated before :"+oldCustomer.getMobileNumbers().toString());
@@ -182,5 +155,7 @@ public class CustomerServiceImpl implements CustomerService {
 		// If a Customer is InValid!
 		return false;
 	}
+	
+	
 	
 }
